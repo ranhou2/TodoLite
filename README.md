@@ -79,3 +79,11 @@ Release 已开启 R8 与资源裁剪，复用 debug 签名，产物在 `app/buil
 ## 作者
 
 酷安 [@然后啊然后](https://www.coolapk.com/)
+
+## 赞赏
+
+如果这个应用帮到了你，可以请作者喝杯奶茶：
+
+<p align="center">
+  <img src="screenshots/donate.jpg" width="30%" alt="赞赏码">
+</p>
