@@ -71,7 +71,7 @@
     [header.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
     [header.heightAnchor constraintEqualToConstant:44].active = YES;
 
-    [close.leadingAnchor constraintEqualToAnchor:header.leadingAnchor constant:18].active = YES;
+    [close.leadingAnchor constraintEqualToAnchor:header.leadingAnchor constant:16].active = YES;
     [close.centerYAnchor constraintEqualToAnchor:header.centerYAnchor].active = YES;
 
     [title.centerXAnchor constraintEqualToAnchor:header.centerXAnchor].active = YES;
@@ -81,7 +81,7 @@
 #pragma mark 表单
 
 - (UILabel *)sectionTitle:(NSString *)text {
-    UILabel *label = TLLabel(text, 13, UIFontWeightMedium, [TLTheme sub]);
+    UILabel *label = TLLabel(text, 15, UIFontWeightSemibold, [TLTheme sub]);
     return label;
 }
 
@@ -104,9 +104,9 @@
 
     [_contentStack.topAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.topAnchor constant:8].active = YES;
     [_contentStack.bottomAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.bottomAnchor constant:-24].active = YES;
-    [_contentStack.leadingAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.leadingAnchor constant:20].active = YES;
-    [_contentStack.trailingAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.trailingAnchor constant:-20].active = YES;
-    [_contentStack.widthAnchor constraintEqualToAnchor:_scrollView.frameLayoutGuide.widthAnchor constant:-40].active = YES;
+    [_contentStack.leadingAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.leadingAnchor constant:16].active = YES;
+    [_contentStack.trailingAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.trailingAnchor constant:-16].active = YES;
+    [_contentStack.widthAnchor constraintEqualToAnchor:_scrollView.frameLayoutGuide.widthAnchor constant:-32].active = YES;
 
     // 标题
     [self.contentStack addArrangedSubview:[self sectionTitle:@"标题"]];

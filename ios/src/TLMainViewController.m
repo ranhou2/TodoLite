@@ -8,12 +8,6 @@
 
 #pragma mark - TLTabBarView
 
-@interface TLTabBarView : UIView
-@property (nonatomic, assign) NSInteger selectedIndex;
-@property (nonatomic, copy) void (^onSelect)(NSInteger index);
-- (void)refreshColors;
-@end
-
 @interface TLTabBarView ()
 @property (nonatomic, strong) NSMutableArray<UIControl *> *items;
 @property (nonatomic, strong) NSMutableArray<UIView *> *pills;
@@ -27,7 +21,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
-        self.layer.cornerRadius = 30;
+        self.layer.cornerRadius = 29;
         self.layer.cornerCurve = kCACornerCurveContinuous;
         TLApplyShadow(self, [UIColor blackColor], 18, 0.08, 6);
         self.translatesAutoresizingMaskIntoConstraints = NO;
@@ -41,7 +35,7 @@
 }
 
 - (void)buildItems {
-    NSArray<NSString *> *symbols = @[@"list.bullet", @"checkmark.circle", @"person.fill"];
+    NSArray<NSString *> *symbols = @[@"list.bullet", @"checkmark.circle.fill", @"person.fill"];
     NSArray<NSString *> *titles = @[@"待办", @"完成", @"我的"];
     for (NSInteger i = 0; i < 3; i++) {
         UIControl *item = [[UIControl alloc] init];
@@ -54,11 +48,11 @@
         pill.userInteractionEnabled = NO;
         [item addSubview:pill];
 
-        UIImageView *icon = TLImageView(symbols[(NSUInteger)i], 18, [TLTheme sub]);
+        UIImageView *icon = TLImageView(symbols[(NSUInteger)i], 20, [TLTheme iconTint]);
         icon.translatesAutoresizingMaskIntoConstraints = YES;
         [item addSubview:icon];
 
-        UILabel *label = TLLabel(titles[(NSUInteger)i], 15, UIFontWeightSemibold, [TLTheme sub]);
+        UILabel *label = TLLabel(titles[(NSUInteger)i], 13, UIFontWeightSemibold, [TLTheme sub]);
         label.translatesAutoresizingMaskIntoConstraints = YES;
         [item addSubview:label];
 
@@ -85,7 +79,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    CGFloat padding = 4.0;
+    CGFloat padding = 5.0;
     CGFloat itemWidth = (self.bounds.size.width - padding * 2) / 3.0;
     CGFloat itemHeight = self.bounds.size.height - padding * 2;
     UIColor *accent = [TLTheme accent];
@@ -98,27 +92,27 @@
         UILabel *label = self.labels[(NSUInteger)i];
         BOOL selected = (i == self.selectedIndex);
 
-        pill.frame = CGRectMake(2, 6, itemWidth - 4, itemHeight - 12);
-        pill.layer.cornerRadius = (itemHeight - 12) / 2.0;
-        pill.backgroundColor = [TLTheme accentWithAlpha:0.12];
+        pill.frame = CGRectMake(0, 0, itemWidth, itemHeight);
+        pill.layer.cornerRadius = 24;
+        pill.backgroundColor = [TLTheme tabSelected];
         pill.hidden = !selected;
 
         label.hidden = !selected;
         label.textColor = accent;
         [label sizeToFit];
 
-        icon.tintColor = selected ? accent : [TLTheme sub];
-        CGFloat iconWidth = 18.0;
+        icon.tintColor = selected ? accent : [TLTheme iconTint];
+        CGFloat iconWidth = selected ? 20.0 : 22.0;
         if (selected) {
-            CGFloat groupWidth = iconWidth + 6.0 + label.bounds.size.width;
+            CGFloat groupWidth = iconWidth + 7.0 + label.bounds.size.width;
             CGFloat startX = (itemWidth - groupWidth) / 2.0;
-            icon.frame = CGRectMake(startX, (itemHeight - 20) / 2.0, iconWidth, 20);
-            label.frame = CGRectMake(startX + iconWidth + 6.0,
+            icon.frame = CGRectMake(startX, (itemHeight - iconWidth) / 2.0, iconWidth, iconWidth);
+            label.frame = CGRectMake(startX + iconWidth + 7.0,
                                      (itemHeight - label.bounds.size.height) / 2.0,
                                      label.bounds.size.width,
                                      label.bounds.size.height);
         } else {
-            icon.frame = CGRectMake((itemWidth - iconWidth) / 2.0, (itemHeight - 20) / 2.0, iconWidth, 20);
+            icon.frame = CGRectMake((itemWidth - iconWidth) / 2.0, (itemHeight - iconWidth) / 2.0, iconWidth, iconWidth);
             label.frame = CGRectZero;
         }
     }
@@ -161,9 +155,9 @@
     _fab = [UIButton buttonWithType:UIButtonTypeCustom];
     _fab.backgroundColor = [TLTheme accent];
     _fab.tintColor = [UIColor whiteColor];
-    _fab.layer.cornerRadius = 28;
+    _fab.layer.cornerRadius = 29;
     _fab.layer.cornerCurve = kCACornerCurveContinuous;
-    [_fab setImage:TLImage(@"plus", 22) forState:UIControlStateNormal];
+    [_fab setImage:TLImage(@"plus", 28) forState:UIControlStateNormal];
     _fab.translatesAutoresizingMaskIntoConstraints = NO;
     [_fab addTarget:self action:@selector(addTapped) forControlEvents:UIControlEventTouchUpInside];
     TLApplyShadow(_fab, [TLTheme accent], 16, 0.35, 8);
@@ -174,15 +168,15 @@
     [_contentView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
     [_contentView.bottomAnchor constraintEqualToAnchor:_tabBar.topAnchor constant:-8].active = YES;
 
-    [_tabBar.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20].active = YES;
-    [_tabBar.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20].active = YES;
+    [_tabBar.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:18].active = YES;
+    [_tabBar.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-18].active = YES;
     [_tabBar.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor constant:-8].active = YES;
-    [_tabBar.heightAnchor constraintEqualToConstant:64].active = YES;
+    [_tabBar.heightAnchor constraintEqualToConstant:58].active = YES;
 
-    [_fab.widthAnchor constraintEqualToConstant:56].active = YES;
-    [_fab.heightAnchor constraintEqualToConstant:56].active = YES;
+    [_fab.widthAnchor constraintEqualToConstant:58].active = YES;
+    [_fab.heightAnchor constraintEqualToConstant:58].active = YES;
     [_fab.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20].active = YES;
-    [_fab.bottomAnchor constraintEqualToAnchor:_tabBar.topAnchor constant:-18].active = YES;
+    [_fab.bottomAnchor constraintEqualToAnchor:_tabBar.topAnchor constant:-24].active = YES;
 
     [self buildChildren];
     [self selectTabIndex:0];

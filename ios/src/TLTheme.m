@@ -1,7 +1,7 @@
 #import "TLTheme.h"
 
 NSNotificationName const TLThemeDidChangeNotification = @"TLThemeDidChangeNotification";
-NSString *const TLAppVersion = @"1.0.0";
+NSString *const TLAppVersion = @"2.0.0";
 static NSString *const kAccentIndexKey = @"tl_accent_index";
 
 @implementation TLTheme
@@ -75,14 +75,17 @@ static NSString *const kAccentIndexKey = @"tl_accent_index";
 + (UIColor *)bg { return [self colorWithHex:0xF2F2F7]; }
 + (UIColor *)card { return [UIColor whiteColor]; }
 + (UIColor *)text { return [self colorWithHex:0x111114]; }
-+ (UIColor *)sub { return [self colorWithHex:0x6D6D72]; }
++ (UIColor *)sub { return [self colorWithHex:0x8A8A8E]; }
 + (UIColor *)hint { return [self colorWithHex:0xB0B0B6]; }
-+ (UIColor *)divider { return [self colorWithHex:0xE6E6EB]; }
++ (UIColor *)divider { return [self colorWithHex:0xEFEFF2]; }
 + (UIColor *)chevron { return [self colorWithHex:0xB7B7BC]; }
 + (UIColor *)red { return [self colorWithHex:0xFF3B30]; }
 + (UIColor *)orange { return [self colorWithHex:0xF2994A]; }
 + (UIColor *)green { return [self colorWithHex:0x34C759]; }
-+ (UIColor *)chipBg { return [self colorWithHex:0xE9E9EE]; }
++ (UIColor *)chipBg { return [self colorWithHex:0xE6E6EB]; }
++ (UIColor *)purple { return [self colorWithHex:0x6E5BE8]; }
++ (UIColor *)tabSelected { return [self colorWithHex:0xE4E4E9]; }
++ (UIColor *)iconTint { return [self colorWithHex:0x6D6D72]; }
 + (UIColor *)fieldBg { return [self colorWithHex:0xEFEFF2]; }
 
 + (UIFont *)font:(CGFloat)size {
