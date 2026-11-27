@@ -130,18 +130,52 @@ void TLApplyShadow(UIView *view, UIColor *color, CGFloat radius, CGFloat opacity
 
 @end
 
+#pragma mark - TLIconSquareView
+
+@implementation TLIconSquareView
+
+- (instancetype)initWithSymbol:(NSString *)symbol tint:(UIColor *)tint {
+    self = [super initWithFrame:CGRectZero];
+    if (self) {
+        self.translatesAutoresizingMaskIntoConstraints = NO;
+        self.backgroundColor = tint;
+        self.layer.cornerRadius = 11;
+        self.layer.cornerCurve = kCACornerCurveContinuous;
+        self.clipsToBounds = YES;
+        [self.widthAnchor constraintEqualToConstant:36].active = YES;
+        [self.heightAnchor constraintEqualToConstant:36].active = YES;
+
+        _imageView = TLImageView(symbol, 19, [UIColor whiteColor]);
+        [self addSubview:_imageView];
+        [_imageView.centerXAnchor constraintEqualToAnchor:self.centerXAnchor].active = YES;
+        [_imageView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
+        [_imageView.widthAnchor constraintEqualToConstant:22].active = YES;
+        [_imageView.heightAnchor constraintEqualToConstant:22].active = YES;
+    }
+    return self;
+}
+
+- (void)setIconTintColor:(UIColor *)tint {
+    self.backgroundColor = tint;
+}
+
+@end
+
 #pragma mark - TLRowView
 
 @interface TLRowView ()
 @property (nonatomic, strong) UIView *separator;
-@property (nonatomic, strong) NSLayoutConstraint *dotLeadingConstraint;
-@property (nonatomic, strong) NSLayoutConstraint *titleLeadingConstraint;
+@property (nonatomic, strong) TLIconSquareView *iconView;
 @property (nonatomic, assign) BOOL destructive;
 @end
 
 @implementation TLRowView
 
 - (instancetype)initWithTitle:(NSString *)title {
+    return [self initWithTitle:title icon:nil tint:nil];
+}
+
+- (instancetype)initWithTitle:(NSString *)title icon:(NSString *)symbol tint:(UIColor *)tint {
     self = [super initWithFrame:CGRectZero];
     if (self) {
         self.translatesAutoresizingMaskIntoConstraints = NO;
@@ -150,64 +184,129 @@ void TLApplyShadow(UIView *view, UIColor *color, CGFloat radius, CGFloat opacity
         _titleLabel = TLLabel(title, 16, UIFontWeightMedium, [TLTheme text]);
         [self addSubview:_titleLabel];
 
-        _valueLabel = TLLabel(@"", 14, UIFontWeightRegular, [TLTheme sub]);
+        _valueLabel = TLLabel(@"", 15, UIFontWeightRegular, [TLTheme sub]);
         _valueLabel.textAlignment = NSTextAlignmentRight;
         [self addSubview:_valueLabel];
 
-        _chevronView = TLImageView(@"chevron.right", 12, [TLTheme chevron]);
+        _chevronView = TLImageView(@"chevron.right", 14, [TLTheme chevron]);
         [self addSubview:_chevronView];
 
         _colorDot = [[UIView alloc] init];
-        _colorDot.translatesAutoresizingMaskIntoConstraints = NO;
-        _colorDot.layer.cornerRadius = 12;
         _colorDot.hidden = YES;
         [self addSubview:_colorDot];
 
         _separator = TLHairline();
         [self addSubview:_separator];
 
-        _titleLeadingConstraint = [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:18];
-        _titleLeadingConstraint.active = YES;
-        [self.titleLabel.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
+        if (symbol.length > 0) {
+            _iconView = [[TLIconSquareView alloc] initWithSymbol:symbol tint:tint ?: [TLTheme accent]];
+            [self addSubview:_iconView];
+            [_iconView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16].active = YES;
+            [_iconView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
+            [_titleLabel.leadingAnchor constraintEqualToAnchor:_iconView.trailingAnchor constant:12].active = YES;
+        } else {
+            [_titleLabel.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16].active = YES;
+        }
+        [_titleLabel.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
+        [_titleLabel setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
 
-        [self.chevronView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16].active = YES;
-        [self.chevronView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
-        [self.chevronView.widthAnchor constraintEqualToConstant:14].active = YES;
-        [self.chevronView.heightAnchor constraintEqualToConstant:16].active = YES;
+        [_chevronView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16].active = YES;
+        [_chevronView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
+        [_chevronView.widthAnchor constraintEqualToConstant:18].active = YES;
+        [_chevronView.heightAnchor constraintEqualToConstant:18].active = YES;
 
-        [self.valueLabel.trailingAnchor constraintEqualToAnchor:self.chevronView.leadingAnchor constant:-8].active = YES;
-        [self.valueLabel.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
-        [self.valueLabel.leadingAnchor constraintGreaterThanOrEqualToAnchor:self.titleLabel.trailingAnchor constant:8].active = YES;
+        [_valueLabel.trailingAnchor constraintEqualToAnchor:_chevronView.leadingAnchor constant:-6].active = YES;
+        [_valueLabel.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
+        [_valueLabel.leadingAnchor constraintGreaterThanOrEqualToAnchor:_titleLabel.trailingAnchor constant:8].active = YES;
+        [_valueLabel setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
 
-        [self.colorDot.widthAnchor constraintEqualToConstant:24].active = YES;
-        [self.colorDot.heightAnchor constraintEqualToConstant:24].active = YES;
-        _dotLeadingConstraint = [self.colorDot.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:18];
-        _dotLeadingConstraint.active = YES;
-        [self.colorDot.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
+        [_separator.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:(symbol.length > 0 ? 64 : 16)].active = YES;
+        [_separator.trailingAnchor constraintEqualToAnchor:self.trailingAnchor].active = YES;
+        [_separator.bottomAnchor constraintEqualToAnchor:self.bottomAnchor].active = YES;
+        [_separator.heightAnchor constraintEqualToConstant:0.5].active = YES;
 
-        [self.separator.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:18].active = YES;
-        [self.separator.trailingAnchor constraintEqualToAnchor:self.trailingAnchor].active = YES;
-        [self.separator.bottomAnchor constraintEqualToAnchor:self.bottomAnchor].active = YES;
-        [self.separator.heightAnchor constraintEqualToConstant:0.5].active = YES;
-
-        [self.heightAnchor constraintEqualToConstant:54].active = YES;
+        [self.heightAnchor constraintEqualToConstant:58].active = YES;
     }
     return self;
 }
 
 - (void)setDetailText:(NSString *)text {
     self.valueLabel.text = text ?: @"";
+    self.valueLabel.hidden = (text.length == 0);
 }
 
 - (void)setAccentDotColor:(UIColor *)color {
-    self.colorDot.hidden = (color == nil);
-    self.colorDot.backgroundColor = color;
-    self.titleLeadingConstraint.constant = (color != nil) ? 56 : 18;
+    self.colorDot.hidden = YES;
+}
+
+- (void)setIconTintColor:(UIColor *)tint {
+    [self.iconView setIconTintColor:tint];
 }
 
 - (void)setDestructive:(BOOL)destructive {
     _destructive = destructive;
-    self.titleLabel.textColor = destructive ? [TLTheme red] : [TLTheme text];
+    self.titleLabel.textColor = [TLTheme text];
+}
+
+- (void)setShowsDivider:(BOOL)showsDivider {
+    _showsDivider = showsDivider;
+    self.separator.hidden = !showsDivider;
+}
+
+@end
+
+#pragma mark - TLInfoRowView
+
+@interface TLInfoRowView ()
+@property (nonatomic, strong) UIView *separator;
+@end
+
+@implementation TLInfoRowView
+
+- (instancetype)initWithTitle:(NSString *)title value:(NSString *)value action:(BOOL)action {
+    self = [super initWithFrame:CGRectZero];
+    if (self) {
+        self.translatesAutoresizingMaskIntoConstraints = NO;
+        self.backgroundColor = [UIColor clearColor];
+        self.userInteractionEnabled = action;
+
+        _titleLabel = TLLabel(title, 16, UIFontWeightMedium, [TLTheme text]);
+        [self addSubview:_titleLabel];
+
+        _valueLabel = TLLabel(value ?: @"", 16, UIFontWeightRegular, [TLTheme sub]);
+        _valueLabel.textAlignment = NSTextAlignmentRight;
+        [self addSubview:_valueLabel];
+
+        _chevronView = TLImageView(@"chevron.right", 13, [TLTheme chevron]);
+        _chevronView.hidden = !action;
+        [self addSubview:_chevronView];
+
+        _separator = TLHairline();
+        [self addSubview:_separator];
+
+        [_titleLabel.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16].active = YES;
+        [_titleLabel.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
+
+        if (action) {
+            [_chevronView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16].active = YES;
+            [_chevronView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
+            [_chevronView.widthAnchor constraintEqualToConstant:16].active = YES;
+            [_chevronView.heightAnchor constraintEqualToConstant:16].active = YES;
+            [_valueLabel.trailingAnchor constraintEqualToAnchor:_chevronView.leadingAnchor constant:-6].active = YES;
+        } else {
+            [_valueLabel.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16].active = YES;
+        }
+        [_valueLabel.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
+        [_valueLabel.leadingAnchor constraintGreaterThanOrEqualToAnchor:_titleLabel.trailingAnchor constant:8].active = YES;
+
+        [_separator.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16].active = YES;
+        [_separator.trailingAnchor constraintEqualToAnchor:self.trailingAnchor].active = YES;
+        [_separator.bottomAnchor constraintEqualToAnchor:self.bottomAnchor].active = YES;
+        [_separator.heightAnchor constraintEqualToConstant:0.5].active = YES;
+
+        [self.heightAnchor constraintEqualToConstant:56].active = YES;
+    }
+    return self;
 }
 
 - (void)setShowsDivider:(BOOL)showsDivider {

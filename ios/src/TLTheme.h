@@ -28,6 +28,9 @@ extern NSString *const TLAppVersion;
 + (UIColor *)green;
 + (UIColor *)chipBg;
 + (UIColor *)fieldBg;
++ (UIColor *)purple;
++ (UIColor *)tabSelected;
++ (UIColor *)iconTint;
 
 + (UIColor *)colorWithHex:(NSUInteger)hex;
 + (UIColor *)colorWithHex:(NSUInteger)hex alpha:(CGFloat)alpha;

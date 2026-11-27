@@ -28,15 +28,9 @@ TodoLite（今日事）的 iOS 原生移植版本。原版是 Android 上的 Kot
 - 左滑删除 + 撤销提示
 - 截止提醒六档：不提醒 / 提前 30 分钟 / 1 小时 / 6 小时 / 1 天 / 2 天，按「截止日 24:00 − 提前量」计算，使用本地通知
 - 七种浅色主题：天蓝、湖蓝、薄荷、藕紫、蜜橘、樱粉、石墨，切换后全局生效
-- 我的页：完成率进度、提醒档位、外观主题、关于
+- 我的页：完成情况三栏统计与进度条、提醒档位、外观主题、数据管理、关于
 - 数据管理：导出 JSON 备份、导入合并（按 id 去重，不覆盖本地）、清空已完成、清空全部
 - 全部数据存放在本机 NSUserDefaults，应用不联网、无统计、无账号
-
-## 截图
-
-「我的」页（iPhone 实机，v1.0.0）
-
-![「我的」页](screenshots/01.jpg)
 
 ## 数据格式
 
@@ -85,7 +79,7 @@ cd ldid && make          # 需要 libplist-dev 与 libssl-dev
 SDK=/path/to/iPhoneOS16.5.sdk LDID=/path/to/ldid ./build.sh
 ```
 
-产物：`build/今日事-iOS-v1.0.0-unsigned.ipa`（可用 `VERSION=1.0.1 ./build.sh` 指定版本号）。
+产物：`build/今日事-iOS-v2.0.0-unsigned.ipa`（可用 `VERSION=2.0.1 ./build.sh` 指定版本号）。
 
 ## 安装
 

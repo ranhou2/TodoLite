@@ -75,7 +75,7 @@
 
         [_chevronView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-16].active = YES;
         [_chevronView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor].active = YES;
-        [_chevronView.widthAnchor constraintEqualToConstant:14].active = YES;
+        [_chevronView.widthAnchor constraintEqualToConstant:16].active = YES;
         [_chevronView.heightAnchor constraintEqualToConstant:16].active = YES;
 
         [_separator.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:56].active = YES;
@@ -207,10 +207,10 @@
         _descLabel.numberOfLines = 2;
         [self addSubview:_descLabel];
 
-        [_iconView.topAnchor constraintEqualToAnchor:self.topAnchor constant:26].active = YES;
+        [_iconView.topAnchor constraintEqualToAnchor:self.topAnchor constant:24].active = YES;
         [_iconView.centerXAnchor constraintEqualToAnchor:self.centerXAnchor].active = YES;
-        [_iconView.widthAnchor constraintEqualToConstant:30].active = YES;
-        [_iconView.heightAnchor constraintEqualToConstant:30].active = YES;
+        [_iconView.widthAnchor constraintEqualToConstant:44].active = YES;
+        [_iconView.heightAnchor constraintEqualToConstant:44].active = YES;
 
         [_titleLabel.topAnchor constraintEqualToAnchor:self.iconView.bottomAnchor constant:12].active = YES;
         [_titleLabel.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:20].active = YES;
@@ -225,7 +225,7 @@
 }
 
 - (void)configureSymbol:(NSString *)symbol tint:(UIColor *)tint title:(NSString *)title desc:(NSString *)desc {
-    self.iconView.image = TLImage(symbol, 26);
+    self.iconView.image = TLImage(symbol, 44);
     self.iconView.tintColor = tint;
     self.titleLabel.text = title;
     self.descLabel.text = desc;
@@ -261,10 +261,10 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor clearColor];
 
-    _titleLabel = TLLabel(@"", 34, UIFontWeightBold, [TLTheme text]);
+    _titleLabel = TLLabel(@"", 34, UIFontWeightBlack, [TLTheme text]);
     [self.view addSubview:_titleLabel];
 
-    _subtitleLabel = TLLabel(@"", 14, UIFontWeightRegular, [TLTheme sub]);
+    _subtitleLabel = TLLabel(@"", 15, UIFontWeightRegular, [TLTheme sub]);
     [self.view addSubview:_subtitleLabel];
 
     if (self.mode == TLListModePending) {
@@ -274,29 +274,31 @@
         _versionChip.translatesAutoresizingMaskIntoConstraints = NO;
         [self.view addSubview:_versionChip];
 
-        UILabel *version = TLLabel([NSString stringWithFormat:@"v%@", TLAppVersion], 12, UIFontWeightMedium, [TLTheme colorWithHex:0x8A8A8E]);
+        UILabel *version = TLLabel([NSString stringWithFormat:@"v%@", TLAppVersion], 13, UIFontWeightMedium, [TLTheme text]);
         version.translatesAutoresizingMaskIntoConstraints = NO;
         [_versionChip addSubview:version];
         [version.topAnchor constraintEqualToAnchor:_versionChip.topAnchor constant:4].active = YES;
         [version.bottomAnchor constraintEqualToAnchor:_versionChip.bottomAnchor constant:-4].active = YES;
-        [version.leadingAnchor constraintEqualToAnchor:_versionChip.leadingAnchor constant:10].active = YES;
-        [version.trailingAnchor constraintEqualToAnchor:_versionChip.trailingAnchor constant:-10].active = YES;
+        [version.leadingAnchor constraintEqualToAnchor:_versionChip.leadingAnchor constant:12].active = YES;
+        [version.trailingAnchor constraintEqualToAnchor:_versionChip.trailingAnchor constant:-12].active = YES;
 
-        [_versionChip.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20].active = YES;
-        [_versionChip.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:2].active = YES;
+        [_versionChip.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16].active = YES;
+        [_versionChip.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:5].active = YES;
         [_versionChip.heightAnchor constraintEqualToConstant:24].active = YES;
 
-        [_titleLabel.topAnchor constraintEqualToAnchor:_versionChip.bottomAnchor constant:8].active = YES;
+        [_titleLabel.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:50].active = YES;
     } else {
-        [_titleLabel.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:10].active = YES;
+        [_titleLabel.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:50].active = YES;
     }
 
-    [_titleLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20].active = YES;
-    [_titleLabel.trailingAnchor constraintLessThanOrEqualToAnchor:self.view.trailingAnchor constant:-20].active = YES;
+    [_titleLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16].active = YES;
+    [_titleLabel.trailingAnchor constraintLessThanOrEqualToAnchor:self.view.trailingAnchor constant:-16].active = YES;
+    [_titleLabel.heightAnchor constraintEqualToConstant:48].active = YES;
 
     [_subtitleLabel.topAnchor constraintEqualToAnchor:self.titleLabel.bottomAnchor constant:2].active = YES;
+    [_subtitleLabel.heightAnchor constraintEqualToConstant:24].active = YES;
     [_subtitleLabel.leadingAnchor constraintEqualToAnchor:self.titleLabel.leadingAnchor].active = YES;
-    [_subtitleLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20].active = YES;
+    [_subtitleLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16].active = YES;
 
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     _tableView.backgroundColor = [UIColor clearColor];
@@ -310,15 +312,15 @@
     _tableView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:_tableView];
 
-    [_tableView.topAnchor constraintEqualToAnchor:self.subtitleLabel.bottomAnchor constant:12].active = YES;
-    [_tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20].active = YES;
-    [_tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20].active = YES;
+    [_tableView.topAnchor constraintEqualToAnchor:self.subtitleLabel.bottomAnchor constant:4].active = YES;
+    [_tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16].active = YES;
+    [_tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16].active = YES;
     [_tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
 
     _emptyCard = [[TLEmptyCardView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:_emptyCard];
-    [_emptyCard.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20].active = YES;
-    [_emptyCard.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20].active = YES;
+    [_emptyCard.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16].active = YES;
+    [_emptyCard.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16].active = YES;
     [_emptyCard.topAnchor constraintEqualToAnchor:self.subtitleLabel.bottomAnchor constant:24].active = YES;
 
     [self refreshContent];
@@ -414,16 +416,16 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return self.rows.count > 0 ? 44 : 0.01;
+    return self.rows.count > 0 ? 54 : 0.01;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (self.rows.count == 0) return nil;
-    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 44)];
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 54)];
     header.backgroundColor = [UIColor clearColor];
-    _groupLabel = TLLabel(@"", 13, UIFontWeightMedium, [TLTheme sub]);
+    _groupLabel = TLLabel(@"", 15, UIFontWeightSemibold, [TLTheme sub]);
     _groupLabel.translatesAutoresizingMaskIntoConstraints = YES;
-    _groupLabel.frame = CGRectMake(4, 12, tableView.bounds.size.width - 8, 22);
+    _groupLabel.frame = CGRectMake(4, 18, tableView.bounds.size.width - 8, 22);
     [header addSubview:_groupLabel];
     if (self.mode == TLListModePending) {
         _groupLabel.text = [NSString stringWithFormat:@"待完成 · %ld", (long)self.rows.count];

@@ -7,7 +7,7 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 BUILD="$ROOT/build"
 APP="$BUILD/TodoLite.app"
 SRC="$ROOT/src"
-VERSION="${VERSION:-1.0.0}"
+VERSION="${VERSION:-2.0.0}"
 IPA="$BUILD/今日事-iOS-v${VERSION}-unsigned.ipa"
 
 die() { echo "错误：$*" >&2; exit 1; }

@@ -23,14 +23,14 @@
         self.backgroundColor = [TLTheme divider];
         self.layer.cornerRadius = 3;
         self.translatesAutoresizingMaskIntoConstraints = NO;
-        [self.heightAnchor constraintEqualToConstant:6].active = YES;
+        [self.heightAnchor constraintEqualToConstant:8].active = YES;
 
         _fillView = [[UIView alloc] init];
         _fillView.backgroundColor = [TLTheme accent];
         _fillView.layer.cornerRadius = 3;
         _fillView.translatesAutoresizingMaskIntoConstraints = YES;
         [self addSubview:_fillView];
-        _fillView.frame = CGRectMake(0, 0, 0, 6);
+        _fillView.frame = CGRectMake(0, 0, 0, 8);
     }
     return self;
 }
@@ -75,39 +75,39 @@
         _titleLabel = TLLabel(title, 16, UIFontWeightMedium, [TLTheme text]);
         [self addSubview:_titleLabel];
 
-        _checkView = TLImageView(@"checkmark", 15, [TLTheme accent]);
+        _checkView = TLImageView(@"checkmark", 20, [TLTheme accent]);
         _checkView.hidden = YES;
         [self addSubview:_checkView];
 
         _colorDot = [[UIView alloc] init];
         _colorDot.translatesAutoresizingMaskIntoConstraints = NO;
-        _colorDot.layer.cornerRadius = 13;
+        _colorDot.layer.cornerRadius = 14;
         _colorDot.backgroundColor = dotColor;
         _colorDot.hidden = (dotColor == nil);
         [self addSubview:_colorDot];
 
-        CGFloat textLeading = dotColor ? 58 : 18;
+        CGFloat textLeading = dotColor ? 56 : 16;
         [_titleLabel.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:textLeading].active = YES;
         [_titleLabel.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
 
-        [_colorDot.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:18].active = YES;
+        [_colorDot.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16].active = YES;
         [_colorDot.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
-        [_colorDot.widthAnchor constraintEqualToConstant:26].active = YES;
-        [_colorDot.heightAnchor constraintEqualToConstant:26].active = YES;
+        [_colorDot.widthAnchor constraintEqualToConstant:28].active = YES;
+        [_colorDot.heightAnchor constraintEqualToConstant:28].active = YES;
 
-        [_checkView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-20].active = YES;
+        [_checkView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16].active = YES;
         [_checkView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
-        [_checkView.widthAnchor constraintEqualToConstant:16].active = YES;
-        [_checkView.heightAnchor constraintEqualToConstant:16].active = YES;
+        [_checkView.widthAnchor constraintEqualToConstant:20].active = YES;
+        [_checkView.heightAnchor constraintEqualToConstant:20].active = YES;
 
         _separator = TLHairline();
         [self addSubview:_separator];
-        [_separator.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:(dotColor ? 58 : 18)].active = YES;
+        [_separator.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:(dotColor ? 64 : 16)].active = YES;
         [_separator.trailingAnchor constraintEqualToAnchor:self.trailingAnchor].active = YES;
         [_separator.bottomAnchor constraintEqualToAnchor:self.bottomAnchor].active = YES;
         [_separator.heightAnchor constraintEqualToConstant:0.5].active = YES;
 
-        [self.heightAnchor constraintEqualToConstant:54].active = YES;
+        [self.heightAnchor constraintEqualToConstant:58].active = YES;
     }
     return self;
 }
@@ -131,6 +131,8 @@
 @property (nonatomic, strong) UIStackView *stack;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *subtitleLabel;
+@property (nonatomic, strong) TLTabBarView *tabBar;
+@property (nonatomic, copy, nullable) void (^onSelectTab)(NSInteger index);
 - (void)buildPageWithTitle:(NSString *)title subtitle:(NSString *)subtitle;
 - (TLCardView *)addCardWithRows:(NSArray<UIView *> *)rows;
 - (void)addGroupTitle:(NSString *)text;
@@ -148,50 +150,65 @@
     TLCircleIconButton *back = [[TLCircleIconButton alloc] initWithSymbol:@"chevron.left"];
     [back addTarget:self action:@selector(backTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:back];
-    [back.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:18].active = YES;
+    [back.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16].active = YES;
     [back.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor constant:2].active = YES;
 
-    _titleLabel = TLLabel(title, 30, UIFontWeightBold, [TLTheme text]);
+    _titleLabel = TLLabel(title, 34, UIFontWeightBlack, [TLTheme text]);
     [self.view addSubview:_titleLabel];
-    [_titleLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20].active = YES;
-    [_titleLabel.topAnchor constraintEqualToAnchor:back.bottomAnchor constant:8].active = YES;
+    [_titleLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16].active = YES;
+    [_titleLabel.heightAnchor constraintEqualToConstant:48].active = YES;
+    [_titleLabel.topAnchor constraintEqualToAnchor:back.bottomAnchor constant:12].active = YES;
 
-    _subtitleLabel = TLLabel(subtitle, 14, UIFontWeightRegular, [TLTheme sub]);
+    _subtitleLabel = TLLabel(subtitle, 15, UIFontWeightRegular, [TLTheme sub]);
     [self.view addSubview:_subtitleLabel];
     [_subtitleLabel.leadingAnchor constraintEqualToAnchor:_titleLabel.leadingAnchor].active = YES;
+    [_subtitleLabel.heightAnchor constraintEqualToConstant:24].active = YES;
     [_subtitleLabel.topAnchor constraintEqualToAnchor:_titleLabel.bottomAnchor constant:2].active = YES;
+
+    _tabBar = [[TLTabBarView alloc] initWithFrame:CGRectZero];
+    _tabBar.selectedIndex = 2;
+    __weak typeof(self) weakSelf = self;
+    _tabBar.onSelect = ^(NSInteger index) {
+        if (weakSelf.onSelectTab != nil) weakSelf.onSelectTab(index);
+    };
+    [self.view addSubview:_tabBar];
+    [_tabBar.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:18].active = YES;
+    [_tabBar.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-18].active = YES;
+    [_tabBar.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor constant:-8].active = YES;
+    [_tabBar.heightAnchor constraintEqualToConstant:58].active = YES;
 
     _scrollView = [[UIScrollView alloc] init];
     _scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     _scrollView.showsVerticalScrollIndicator = NO;
+    _scrollView.contentInset = UIEdgeInsetsMake(0, 0, 40, 0);
     [self.view addSubview:_scrollView];
     [_scrollView.topAnchor constraintEqualToAnchor:_subtitleLabel.bottomAnchor constant:12].active = YES;
     [_scrollView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor].active = YES;
     [_scrollView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
-    [_scrollView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
+    [_scrollView.bottomAnchor constraintEqualToAnchor:_tabBar.topAnchor constant:-8].active = YES;
 
     _stack = [[UIStackView alloc] init];
     _stack.axis = UILayoutConstraintAxisVertical;
     _stack.spacing = 0;
     _stack.translatesAutoresizingMaskIntoConstraints = NO;
     [_scrollView addSubview:_stack];
-    [_stack.topAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.topAnchor constant:6].active = YES;
+    [_stack.topAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.topAnchor constant:4].active = YES;
     [_stack.bottomAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.bottomAnchor constant:-30].active = YES;
-    [_stack.leadingAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.leadingAnchor constant:20].active = YES;
-    [_stack.trailingAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.trailingAnchor constant:-20].active = YES;
-    [_stack.widthAnchor constraintEqualToAnchor:_scrollView.frameLayoutGuide.widthAnchor constant:-40].active = YES;
+    [_stack.leadingAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.leadingAnchor constant:16].active = YES;
+    [_stack.trailingAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.trailingAnchor constant:-16].active = YES;
+    [_stack.widthAnchor constraintEqualToAnchor:_scrollView.frameLayoutGuide.widthAnchor constant:-32].active = YES;
 }
 
 - (void)addGroupTitle:(NSString *)text {
-    UILabel *label = TLLabel(text, 13, UIFontWeightMedium, [TLTheme sub]);
+    UILabel *label = TLLabel(text, 15, UIFontWeightSemibold, [TLTheme sub]);
     UIView *wrapper = [[UIView alloc] init];
     wrapper.translatesAutoresizingMaskIntoConstraints = NO;
     label.translatesAutoresizingMaskIntoConstraints = NO;
     [wrapper addSubview:label];
     [label.leadingAnchor constraintEqualToAnchor:wrapper.leadingAnchor constant:4].active = YES;
     [label.topAnchor constraintEqualToAnchor:wrapper.topAnchor constant:18].active = YES;
-    [label.bottomAnchor constraintEqualToAnchor:wrapper.bottomAnchor constant:-8].active = YES;
-    [wrapper.heightAnchor constraintEqualToConstant:46].active = YES;
+    [label.bottomAnchor constraintEqualToAnchor:wrapper.bottomAnchor constant:-14].active = YES;
+    [wrapper.heightAnchor constraintEqualToConstant:54].active = YES;
     [self.stack addArrangedSubview:wrapper];
 }
 
@@ -249,9 +266,10 @@
     }
     [self addCardWithRows:rows];
 
-    UILabel *footer = TLLabel(@"天蓝 · 湖蓝 · 薄荷 · 藕紫 · 蜜橘 · 樱粉 · 石墨", 13, UIFontWeightRegular, [TLTheme hint]);
+    UILabel *footer = TLLabel(@"选择后立即生效并自动记住，按钮、标签和勾选框会一起变化。", 13, UIFontWeightRegular, [TLTheme hint]);
     footer.numberOfLines = 2;
     UIView *wrapper = [[UIView alloc] init];
+    wrapper.translatesAutoresizingMaskIntoConstraints = NO;
     footer.translatesAutoresizingMaskIntoConstraints = NO;
     [wrapper addSubview:footer];
     [footer.leadingAnchor constraintEqualToAnchor:wrapper.leadingAnchor constant:4].active = YES;
@@ -312,6 +330,7 @@
                               13, UIFontWeightRegular, [TLTheme hint]);
     footer.numberOfLines = 0;
     UIView *wrapper = [[UIView alloc] init];
+    wrapper.translatesAutoresizingMaskIntoConstraints = NO;
     footer.translatesAutoresizingMaskIntoConstraints = NO;
     [wrapper addSubview:footer];
     [footer.leadingAnchor constraintEqualToAnchor:wrapper.leadingAnchor constant:4].active = YES;
@@ -345,11 +364,14 @@
 @interface TLProfileViewController () <UIDocumentPickerDelegate>
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIStackView *stack;
-@property (nonatomic, strong) UILabel *percentLabel;
+@property (nonatomic, strong) UILabel *pendingValueLabel;
+@property (nonatomic, strong) UILabel *doneValueLabel;
+@property (nonatomic, strong) UILabel *rateValueLabel;
 @property (nonatomic, strong) UILabel *countLabel;
 @property (nonatomic, strong) TLProgressBar *progressBar;
-@property (nonatomic, strong) TLRowView *appearanceRow;
 @property (nonatomic, strong) TLRowView *remindRow;
+@property (nonatomic, strong) TLRowView *appearanceRow;
+@property (nonatomic, strong) TLRowView *exportRow;
 @property (nonatomic, strong) TLRowView *clearDoneRow;
 @property (nonatomic, strong) TLRowView *clearAllRow;
 @property (nonatomic, assign) BOOL exportingData;
@@ -364,19 +386,71 @@
     [self refreshContent];
 }
 
-- (void)buildUI {
-    UILabel *title = TLLabel(@"我的", 34, UIFontWeightBold, [TLTheme text]);
-    [self.view addSubview:title];
-    [title.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20].active = YES;
-    [title.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:10].active = YES;
+#pragma mark 构建
 
-    UILabel *subtitle = TLLabel(@"今日事 · 无需登录，打开即用", 14, UIFontWeightRegular, [TLTheme sub]);
+- (UIView *)makeVersionChip {
+    UIView *chip = [[UIView alloc] init];
+    chip.backgroundColor = [TLTheme chipBg];
+    chip.layer.cornerRadius = 12;
+    chip.layer.cornerCurve = kCACornerCurveContinuous;
+    chip.translatesAutoresizingMaskIntoConstraints = NO;
+
+    UILabel *version = TLLabel([NSString stringWithFormat:@"v%@", TLAppVersion], 13, UIFontWeightMedium, [TLTheme text]);
+    version.translatesAutoresizingMaskIntoConstraints = NO;
+    [chip addSubview:version];
+    [version.topAnchor constraintEqualToAnchor:chip.topAnchor constant:4].active = YES;
+    [version.bottomAnchor constraintEqualToAnchor:chip.bottomAnchor constant:-4].active = YES;
+    [version.leadingAnchor constraintEqualToAnchor:chip.leadingAnchor constant:12].active = YES;
+    [version.trailingAnchor constraintEqualToAnchor:chip.trailingAnchor constant:-12].active = YES;
+    [chip.heightAnchor constraintEqualToConstant:24].active = YES;
+    return chip;
+}
+
+- (UIView *)statColumnWithValueLabel:(UILabel *)valueLabel caption:(NSString *)caption {
+    UIView *column = [[UIView alloc] init];
+    column.translatesAutoresizingMaskIntoConstraints = NO;
+
+    UIStackView *content = [[UIStackView alloc] init];
+    content.axis = UILayoutConstraintAxisVertical;
+    content.alignment = UIStackViewAlignmentCenter;
+    content.spacing = 2;
+    content.translatesAutoresizingMaskIntoConstraints = NO;
+    [column addSubview:content];
+
+    valueLabel.textAlignment = NSTextAlignmentCenter;
+    UILabel *captionLabel = TLLabel(caption, 13, UIFontWeightRegular, [TLTheme sub]);
+    captionLabel.textAlignment = NSTextAlignmentCenter;
+    [content addArrangedSubview:valueLabel];
+    [content addArrangedSubview:captionLabel];
+
+    [content.centerXAnchor constraintEqualToAnchor:column.centerXAnchor].active = YES;
+    [content.centerYAnchor constraintEqualToAnchor:column.centerYAnchor].active = YES;
+    [content.leadingAnchor constraintGreaterThanOrEqualToAnchor:column.leadingAnchor].active = YES;
+    [content.trailingAnchor constraintLessThanOrEqualToAnchor:column.trailingAnchor].active = YES;
+    return column;
+}
+
+- (void)buildUI {
+    UIView *versionChip = [self makeVersionChip];
+    [self.view addSubview:versionChip];
+    [versionChip.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16].active = YES;
+    [versionChip.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:5].active = YES;
+
+    UILabel *title = TLLabel(@"我的", 34, UIFontWeightBlack, [TLTheme text]);
+    [self.view addSubview:title];
+    [title.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16].active = YES;
+    [title.heightAnchor constraintEqualToConstant:48].active = YES;
+    [title.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:50].active = YES;
+
+    UILabel *subtitle = TLLabel(@"本地存储 · 可导出备份到任意位置", 15, UIFontWeightRegular, [TLTheme sub]);
     [self.view addSubview:subtitle];
     [subtitle.leadingAnchor constraintEqualToAnchor:title.leadingAnchor].active = YES;
+    [subtitle.heightAnchor constraintEqualToConstant:24].active = YES;
     [subtitle.topAnchor constraintEqualToAnchor:title.bottomAnchor constant:2].active = YES;
 
     _scrollView = [[UIScrollView alloc] init];
     _scrollView.showsVerticalScrollIndicator = NO;
+    _scrollView.contentInset = UIEdgeInsetsMake(0, 0, 120, 0);
     _scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:_scrollView];
     [_scrollView.topAnchor constraintEqualToAnchor:subtitle.bottomAnchor constant:12].active = YES;
@@ -391,103 +465,169 @@
     [_scrollView addSubview:_stack];
     [_stack.topAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.topAnchor constant:4].active = YES;
     [_stack.bottomAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.bottomAnchor constant:-30].active = YES;
-    [_stack.leadingAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.leadingAnchor constant:20].active = YES;
-    [_stack.trailingAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.trailingAnchor constant:-20].active = YES;
-    [_stack.widthAnchor constraintEqualToAnchor:_scrollView.frameLayoutGuide.widthAnchor constant:-40].active = YES;
+    [_stack.leadingAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.leadingAnchor constant:16].active = YES;
+    [_stack.trailingAnchor constraintEqualToAnchor:_scrollView.contentLayoutGuide.trailingAnchor constant:-16].active = YES;
+    [_stack.widthAnchor constraintEqualToAnchor:_scrollView.frameLayoutGuide.widthAnchor constant:-32].active = YES;
 
-    // 完成情况卡片
+    // 完成情况：三栏数据 + 进度条
+    [self addGroupTitle:@"完成情况"];
     TLCardView *statsCard = [[TLCardView alloc] init];
     [_stack addArrangedSubview:statsCard];
 
-    UILabel *caption = TLLabel(@"完成情况", 13, UIFontWeightMedium, [TLTheme sub]);
-    [statsCard addSubview:caption];
-    [caption.leadingAnchor constraintEqualToAnchor:statsCard.leadingAnchor constant:18].active = YES;
-    [caption.topAnchor constraintEqualToAnchor:statsCard.topAnchor constant:18].active = YES;
+    UIView *statsRow = [[UIView alloc] init];
+    statsRow.translatesAutoresizingMaskIntoConstraints = NO;
+    [statsCard addSubview:statsRow];
+    [statsRow.topAnchor constraintEqualToAnchor:statsCard.topAnchor constant:20].active = YES;
+    [statsRow.leadingAnchor constraintEqualToAnchor:statsCard.leadingAnchor constant:16].active = YES;
+    [statsRow.trailingAnchor constraintEqualToAnchor:statsCard.trailingAnchor constant:-16].active = YES;
+    [statsRow.heightAnchor constraintEqualToConstant:58].active = YES;
 
-    _percentLabel = TLLabel(@"0%", 34, UIFontWeightBold, [TLTheme accent]);
-    [statsCard addSubview:_percentLabel];
-    [_percentLabel.leadingAnchor constraintEqualToAnchor:statsCard.leadingAnchor constant:18].active = YES;
-    [_percentLabel.topAnchor constraintEqualToAnchor:caption.bottomAnchor constant:6].active = YES;
+    _pendingValueLabel = TLLabel(@"0", 26, UIFontWeightBlack, [TLTheme accent]);
+    _doneValueLabel = TLLabel(@"0", 26, UIFontWeightBlack, [TLTheme green]);
+    _rateValueLabel = TLLabel(@"0%", 26, UIFontWeightBlack, [TLTheme purple]);
 
-    UILabel *rateCaption = TLLabel(@"完成率", 13, UIFontWeightRegular, [TLTheme sub]);
-    [statsCard addSubview:rateCaption];
-    [rateCaption.leadingAnchor constraintEqualToAnchor:_percentLabel.trailingAnchor constant:6].active = YES;
-    [rateCaption.lastBaselineAnchor constraintEqualToAnchor:_percentLabel.lastBaselineAnchor].active = YES;
+    UIView *pendingColumn = [self statColumnWithValueLabel:_pendingValueLabel caption:@"待完成"];
+    UIView *doneColumn = [self statColumnWithValueLabel:_doneValueLabel caption:@"已完成"];
+    UIView *rateColumn = [self statColumnWithValueLabel:_rateValueLabel caption:@"完成率"];
 
-    _countLabel = TLLabel(@"", 14, UIFontWeightRegular, [TLTheme sub]);
-    [statsCard addSubview:_countLabel];
-    [_countLabel.leadingAnchor constraintEqualToAnchor:_percentLabel.leadingAnchor].active = YES;
-    [_countLabel.topAnchor constraintEqualToAnchor:_percentLabel.bottomAnchor constant:4].active = YES;
+    UIView *divider1 = [[UIView alloc] init];
+    divider1.backgroundColor = [TLTheme divider];
+    divider1.translatesAutoresizingMaskIntoConstraints = NO;
+    UIView *divider2 = [[UIView alloc] init];
+    divider2.backgroundColor = [TLTheme divider];
+    divider2.translatesAutoresizingMaskIntoConstraints = NO;
+
+    [statsRow addSubview:pendingColumn];
+    [statsRow addSubview:divider1];
+    [statsRow addSubview:doneColumn];
+    [statsRow addSubview:divider2];
+    [statsRow addSubview:rateColumn];
+
+    [pendingColumn.leadingAnchor constraintEqualToAnchor:statsRow.leadingAnchor].active = YES;
+    [pendingColumn.topAnchor constraintEqualToAnchor:statsRow.topAnchor].active = YES;
+    [pendingColumn.bottomAnchor constraintEqualToAnchor:statsRow.bottomAnchor].active = YES;
+
+    [divider1.leadingAnchor constraintEqualToAnchor:pendingColumn.trailingAnchor].active = YES;
+    [divider1.centerYAnchor constraintEqualToAnchor:statsRow.centerYAnchor].active = YES;
+    [divider1.widthAnchor constraintEqualToConstant:1].active = YES;
+    [divider1.heightAnchor constraintEqualToConstant:34].active = YES;
+
+    [doneColumn.leadingAnchor constraintEqualToAnchor:divider1.trailingAnchor].active = YES;
+    [doneColumn.topAnchor constraintEqualToAnchor:statsRow.topAnchor].active = YES;
+    [doneColumn.bottomAnchor constraintEqualToAnchor:statsRow.bottomAnchor].active = YES;
+    [doneColumn.widthAnchor constraintEqualToAnchor:pendingColumn.widthAnchor].active = YES;
+
+    [divider2.leadingAnchor constraintEqualToAnchor:doneColumn.trailingAnchor].active = YES;
+    [divider2.centerYAnchor constraintEqualToAnchor:statsRow.centerYAnchor].active = YES;
+    [divider2.widthAnchor constraintEqualToConstant:1].active = YES;
+    [divider2.heightAnchor constraintEqualToConstant:34].active = YES;
+
+    [rateColumn.leadingAnchor constraintEqualToAnchor:divider2.trailingAnchor].active = YES;
+    [rateColumn.trailingAnchor constraintEqualToAnchor:statsRow.trailingAnchor].active = YES;
+    [rateColumn.topAnchor constraintEqualToAnchor:statsRow.topAnchor].active = YES;
+    [rateColumn.bottomAnchor constraintEqualToAnchor:statsRow.bottomAnchor].active = YES;
+    [rateColumn.widthAnchor constraintEqualToAnchor:pendingColumn.widthAnchor].active = YES;
 
     _progressBar = [[TLProgressBar alloc] init];
     [statsCard addSubview:_progressBar];
-    [_progressBar.leadingAnchor constraintEqualToAnchor:statsCard.leadingAnchor constant:18].active = YES;
-    [_progressBar.trailingAnchor constraintEqualToAnchor:statsCard.trailingAnchor constant:-18].active = YES;
-    [_progressBar.topAnchor constraintEqualToAnchor:_countLabel.bottomAnchor constant:14].active = YES;
-    [_progressBar.bottomAnchor constraintEqualToAnchor:statsCard.bottomAnchor constant:-20].active = YES;
+    [_progressBar.leadingAnchor constraintEqualToAnchor:statsCard.leadingAnchor constant:16].active = YES;
+    [_progressBar.trailingAnchor constraintEqualToAnchor:statsCard.trailingAnchor constant:-16].active = YES;
+    [_progressBar.topAnchor constraintEqualToAnchor:statsRow.bottomAnchor constant:18].active = YES;
 
-    // 设置
-    [self addGroupTitle:@"设置"];
-    _appearanceRow = [[TLRowView alloc] initWithTitle:@"外观"];
-    [_appearanceRow addTarget:self action:@selector(openAppearance) forControlEvents:UIControlEventTouchUpInside];
-    _remindRow = [[TLRowView alloc] initWithTitle:@"提醒"];
+    _countLabel = TLLabel(@"", 13, UIFontWeightRegular, [TLTheme sub]);
+    _countLabel.numberOfLines = 0;
+    [statsCard addSubview:_countLabel];
+    [_countLabel.leadingAnchor constraintEqualToAnchor:statsCard.leadingAnchor constant:16].active = YES;
+    [_countLabel.trailingAnchor constraintEqualToAnchor:statsCard.trailingAnchor constant:-16].active = YES;
+    [_countLabel.topAnchor constraintEqualToAnchor:_progressBar.bottomAnchor constant:10].active = YES;
+    [_countLabel.bottomAnchor constraintEqualToAnchor:statsCard.bottomAnchor constant:-20].active = YES;
+
+    // 提醒
+    [self addGroupTitle:@"提醒"];
+    _remindRow = [[TLRowView alloc] initWithTitle:@"截止前提醒" icon:@"bell.fill" tint:[TLTheme orange]];
     [_remindRow addTarget:self action:@selector(openRemind) forControlEvents:UIControlEventTouchUpInside];
-    TLRowView *aboutRow = [[TLRowView alloc] initWithTitle:@"关于"];
-    [aboutRow addTarget:self action:@selector(openAbout) forControlEvents:UIControlEventTouchUpInside];
-    _appearanceRow.showsDivider = YES;
-    _remindRow.showsDivider = YES;
-    aboutRow.showsDivider = NO;
-    [self addCardWithRows:@[_appearanceRow, _remindRow, aboutRow]];
+    _remindRow.showsDivider = NO;
+    [self addCardWithRows:@[_remindRow]];
+
+    // 外观
+    [self addGroupTitle:@"外观"];
+    _appearanceRow = [[TLRowView alloc] initWithTitle:@"主题色" icon:@"paintpalette.fill" tint:[TLTheme accent]];
+    [_appearanceRow addTarget:self action:@selector(openAppearance) forControlEvents:UIControlEventTouchUpInside];
+    _appearanceRow.showsDivider = NO;
+    [self addCardWithRows:@[_appearanceRow]];
 
     // 数据管理
     [self addGroupTitle:@"数据管理"];
-    TLRowView *exportRow = [[TLRowView alloc] initWithTitle:@"导出数据"];
-    [exportRow addTarget:self action:@selector(exportData) forControlEvents:UIControlEventTouchUpInside];
-    TLRowView *importRow = [[TLRowView alloc] initWithTitle:@"导入数据"];
+    _exportRow = [[TLRowView alloc] initWithTitle:@"导出数据" icon:@"arrow.up.circle.fill" tint:[TLTheme accent]];
+    [_exportRow addTarget:self action:@selector(exportData) forControlEvents:UIControlEventTouchUpInside];
+    _exportRow.showsDivider = YES;
+
+    TLRowView *importRow = [[TLRowView alloc] initWithTitle:@"导入数据" icon:@"arrow.down.circle.fill" tint:[TLTheme purple]];
     [importRow addTarget:self action:@selector(importData) forControlEvents:UIControlEventTouchUpInside];
-    _clearDoneRow = [[TLRowView alloc] initWithTitle:@"清空已完成"];
+    [importRow setDetailText:@"合并"];
+    importRow.showsDivider = YES;
+
+    _clearDoneRow = [[TLRowView alloc] initWithTitle:@"清空已完成" icon:@"trash.fill" tint:[TLTheme green]];
     [_clearDoneRow addTarget:self action:@selector(clearDoneTapped) forControlEvents:UIControlEventTouchUpInside];
     _clearDoneRow.showsDivider = YES;
-    [_clearDoneRow setDestructive:YES];
-    _clearAllRow = [[TLRowView alloc] initWithTitle:@"清空全部待办"];
-    [_clearAllRow addTarget:self action:@selector(clearAllTapped) forControlEvents:UIControlEventTouchUpInside];
-    [_clearAllRow setDestructive:YES];
-    _clearAllRow.showsDivider = NO;
-    [self addCardWithRows:@[exportRow, importRow, _clearDoneRow, _clearAllRow]];
 
-    UILabel *hint = TLLabel(@"导出时可选择任意文件夹；导入会按记录合并，不会覆盖本地数据。", 12, UIFontWeightRegular, [TLTheme hint]);
+    _clearAllRow = [[TLRowView alloc] initWithTitle:@"清空全部待办" icon:@"trash.fill" tint:[TLTheme red]];
+    [_clearAllRow addTarget:self action:@selector(clearAllTapped) forControlEvents:UIControlEventTouchUpInside];
+    _clearAllRow.showsDivider = NO;
+
+    [self addCardWithRows:@[_exportRow, importRow, _clearDoneRow, _clearAllRow]];
+
+    UILabel *hint = TLLabel(@"导出时可选择任意文件夹；导入会按记录合并，不会覆盖本地数据。", 13, UIFontWeightRegular, [TLTheme hint]);
     hint.numberOfLines = 0;
     UIView *hintWrapper = [[UIView alloc] init];
+    hintWrapper.translatesAutoresizingMaskIntoConstraints = NO;
     hint.translatesAutoresizingMaskIntoConstraints = NO;
     [hintWrapper addSubview:hint];
     [hint.leadingAnchor constraintEqualToAnchor:hintWrapper.leadingAnchor constant:4].active = YES;
     [hint.trailingAnchor constraintEqualToAnchor:hintWrapper.trailingAnchor constant:-4].active = YES;
-    [hint.topAnchor constraintEqualToAnchor:hintWrapper.topAnchor constant:12].active = YES;
-    [hintWrapper.heightAnchor constraintEqualToConstant:56].active = YES;
+    [hint.topAnchor constraintEqualToAnchor:hintWrapper.topAnchor constant:14].active = YES;
+    [hint.bottomAnchor constraintEqualToAnchor:hintWrapper.bottomAnchor].active = YES;
     [_stack addArrangedSubview:hintWrapper];
 
-    UILabel *footer = TLLabel(@"所有数据仅保存在你的设备上。\n今日事 v1.0.0 · 本地存储", 12, UIFontWeightRegular, [TLTheme hint]);
-    footer.numberOfLines = 0;
-    footer.textAlignment = NSTextAlignmentCenter;
-    UIView *footerWrapper = [[UIView alloc] init];
-    footer.translatesAutoresizingMaskIntoConstraints = NO;
-    [footerWrapper addSubview:footer];
-    [footer.leadingAnchor constraintEqualToAnchor:footerWrapper.leadingAnchor].active = YES;
-    [footer.trailingAnchor constraintEqualToAnchor:footerWrapper.trailingAnchor].active = YES;
-    [footer.topAnchor constraintEqualToAnchor:footerWrapper.topAnchor constant:10].active = YES;
-    [footerWrapper.heightAnchor constraintEqualToConstant:60].active = YES;
-    [_stack addArrangedSubview:footerWrapper];
+    // 关于
+    [self addGroupTitle:@"关于"];
+    TLInfoRowView *nameRow = [[TLInfoRowView alloc] initWithTitle:@"应用名称" value:@"今日事" action:NO];
+    nameRow.showsDivider = YES;
+    TLInfoRowView *versionRow = [[TLInfoRowView alloc] initWithTitle:@"当前版本" value:[NSString stringWithFormat:@"v%@", TLAppVersion] action:NO];
+    versionRow.showsDivider = YES;
+    TLInfoRowView *authorRow = [[TLInfoRowView alloc] initWithTitle:@"作者" value:@"酷安 @然后啊然后" action:NO];
+    authorRow.showsDivider = YES;
+    TLInfoRowView *disclaimerRow = [[TLInfoRowView alloc] initWithTitle:@"免责声明" value:@"查看" action:YES];
+    [disclaimerRow addTarget:self action:@selector(openDisclaimer) forControlEvents:UIControlEventTouchUpInside];
+    disclaimerRow.showsDivider = YES;
+    TLInfoRowView *thanksRow = [[TLInfoRowView alloc] initWithTitle:@"开源致谢" value:@"查看" action:YES];
+    [thanksRow addTarget:self action:@selector(openAcknowledgments) forControlEvents:UIControlEventTouchUpInside];
+    thanksRow.showsDivider = NO;
+    [self addCardWithRows:@[nameRow, versionRow, authorRow, disclaimerRow, thanksRow]];
+
+    UILabel *tagline = TLLabel(@"今日事 · 无需登录，打开即用", 13, UIFontWeightRegular, [TLTheme hint]);
+    tagline.textAlignment = NSTextAlignmentCenter;
+    UIView *taglineWrapper = [[UIView alloc] init];
+    taglineWrapper.translatesAutoresizingMaskIntoConstraints = NO;
+    tagline.translatesAutoresizingMaskIntoConstraints = NO;
+    [taglineWrapper addSubview:tagline];
+    [tagline.leadingAnchor constraintEqualToAnchor:taglineWrapper.leadingAnchor].active = YES;
+    [tagline.trailingAnchor constraintEqualToAnchor:taglineWrapper.trailingAnchor].active = YES;
+    [tagline.topAnchor constraintEqualToAnchor:taglineWrapper.topAnchor constant:14].active = YES;
+    [tagline.bottomAnchor constraintEqualToAnchor:taglineWrapper.bottomAnchor constant:-8].active = YES;
+    [_stack addArrangedSubview:taglineWrapper];
 }
 
 - (void)addGroupTitle:(NSString *)text {
-    UILabel *label = TLLabel(text, 13, UIFontWeightMedium, [TLTheme sub]);
-    UIView *wrapper = [[UIView alloc] init];
+    UILabel *label = TLLabel(text, 15, UIFontWeightSemibold, [TLTheme sub]);
     label.translatesAutoresizingMaskIntoConstraints = NO;
+    UIView *wrapper = [[UIView alloc] init];
+    wrapper.translatesAutoresizingMaskIntoConstraints = NO;
     [wrapper addSubview:label];
     [label.leadingAnchor constraintEqualToAnchor:wrapper.leadingAnchor constant:4].active = YES;
-    [label.topAnchor constraintEqualToAnchor:wrapper.topAnchor constant:16].active = YES;
-    [label.bottomAnchor constraintEqualToAnchor:wrapper.bottomAnchor constant:-8].active = YES;
-    [wrapper.heightAnchor constraintEqualToConstant:44].active = YES;
+    [label.topAnchor constraintEqualToAnchor:wrapper.topAnchor constant:18].active = YES;
+    [label.bottomAnchor constraintEqualToAnchor:wrapper.bottomAnchor constant:-14].active = YES;
+    [wrapper.heightAnchor constraintEqualToConstant:54].active = YES;
     [_stack addArrangedSubview:wrapper];
 }
 
@@ -516,17 +656,23 @@
     TLTodoStore *store = [TLTodoStore shared];
     NSInteger total = (NSInteger)store.allItems.count;
     NSInteger done = (NSInteger)store.doneItems.count;
-    NSInteger percent = (total == 0) ? 0 : (NSInteger)(((double)done / (double)total) * 100.0 + 0.5);
-    self.percentLabel.text = [NSString stringWithFormat:@"%ld%%", (long)percent];
-    self.countLabel.text = [NSString stringWithFormat:@"已经完成 %ld / %ld 项", (long)done, (long)total];
+    NSInteger pending = MAX(0, total - done);
+    NSInteger percent = (total == 0) ? 0 : (done * 100) / total;
+
+    UIColor *accent = [TLTheme accent];
+    self.pendingValueLabel.text = [NSString stringWithFormat:@"%ld", (long)pending];
+    self.pendingValueLabel.textColor = accent;
+    self.doneValueLabel.text = [NSString stringWithFormat:@"%ld", (long)done];
+    self.rateValueLabel.text = [NSString stringWithFormat:@"%ld%%", (long)percent];
+    self.countLabel.text = (total == 0 ? @"还没有记录，先去「待办」写一条吧"
+                                        : [NSString stringWithFormat:@"已经完成 %ld / %ld 项", (long)done, (long)total]);
     self.progressBar.progress = (total == 0) ? 0 : (CGFloat)done / (CGFloat)total;
     [self.progressBar refreshAccent];
-    self.percentLabel.textColor = [TLTheme accent];
 
     [self.appearanceRow setDetailText:[TLTheme accentNameAtIndex:[TLTheme accentIndex]]];
-    [self.appearanceRow setAccentDotColor:[TLTheme accent]];
+    [self.appearanceRow setIconTintColor:accent];
     [self.remindRow setDetailText:TLReminderLabelForMinutes(TLReminderLeadMinutes())];
-    [self.remindRow setAccentDotColor:nil];
+    [self.exportRow setDetailText:[NSString stringWithFormat:@"%ld 项", (long)total]];
     [self.clearDoneRow setDetailText:[NSString stringWithFormat:@"%ld 项", (long)done]];
     [self.clearAllRow setDetailText:[NSString stringWithFormat:@"%ld 项", (long)total]];
     [self.progressBar setNeedsLayout];
@@ -542,6 +688,11 @@
         [weakSelf dismissViewControllerAnimated:YES completion:nil];
         [weakSelf refreshContent];
     };
+    vc.onSelectTab = ^(NSInteger index) {
+        [weakSelf dismissViewControllerAnimated:YES completion:^{
+            [weakSelf.host selectTabIndex:index];
+        }];
+    };
     [self presentViewController:vc animated:YES completion:nil];
 }
 
@@ -553,20 +704,39 @@
         [weakSelf dismissViewControllerAnimated:YES completion:nil];
         [weakSelf refreshContent];
     };
+    vc.onSelectTab = ^(NSInteger index) {
+        [weakSelf dismissViewControllerAnimated:YES completion:^{
+            [weakSelf.host selectTabIndex:index];
+        }];
+    };
     [self presentViewController:vc animated:YES completion:nil];
 }
 
-- (void)openAbout {
-    NSString *message = [NSString stringWithFormat:@"今日事 v%@\n\n"
-                         "1. 「今日事」是一款完全离线的本地待办工具，不会联网，不收集、不上传任何个人信息。\n"
-                         "2. 导出功能生成的备份文件保存在你自行选择的位置，请注意妥善保管。\n"
-                         "3. 本应用仅供个人学习与日常使用，请勿用于商业用途；本应用为非官方 iOS 移植版本，与 Android 原版作者无授权关系。\n"
-                         "4. 开发者不对因使用本应用造成的任何数据丢失或损失承担责任，重要数据请定期导出备份。\n\n"
-                         "作者：酷安 @然后啊然后\niOS 移植与适配：Jacky", TLAppVersion];
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"关于"
-                                                                  message:message
+- (void)openDisclaimer {
+    NSString *message = @"1. 「今日事」是一款完全离线的本地待办工具，不会联网，不收集、不上传任何个人信息，所有数据仅保存在您的设备上。\n\n"
+                        "2. 导出功能生成的备份文件保存在您自行选择的位置，请注意妥善保管，避免隐私泄露。\n\n"
+                        "3. 本应用仅供个人学习与日常使用，请勿用于商业用途。本 iOS 版本为非官方移植，未获得 Android 原版作者正式授权，原作者如有异议将立即停止分发并删除。\n\n"
+                        "4. 开发者不对因使用本应用造成的任何数据丢失或损失承担责任，重要数据请定期导出备份。\n\n"
+                        "5. 继续使用本应用即表示您已阅读并同意以上内容。\n\n"
+                        "—— 原版作者：酷安 @然后啊然后；iOS 移植：Jacky";
+    [self showTextDialogWithTitle:@"免责声明" body:message];
+}
+
+- (void)openAcknowledgments {
+    NSString *message = @"「今日事」原版基于以下开源项目构建：\n\n"
+                        "· mochi-compose（MIT License）\n  提供全套 UI 组件与动效（github.com/feice11/mochi-compose）\n\n"
+                        "· Jetpack Compose / AndroidX（Apache License 2.0）\n  Google 现代化 Android UI 框架\n\n"
+                        "· Kotlin（Apache License 2.0）\n  JetBrains 出品的编程语言\n\n"
+                        "iOS 移植使用 Apple UIKit / Foundation；交叉构建使用 theos/sdks 与 ldid。\n\n"
+                        "原版作者：酷安 @然后啊然后；iOS 移植：Jacky";
+    [self showTextDialogWithTitle:@"开源致谢" body:message];
+}
+
+- (void)showTextDialogWithTitle:(NSString *)title body:(NSString *)body {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title
+                                                                  message:body
                                                            preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"我知道了" style:UIAlertActionStyleDefault handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
@@ -630,7 +800,7 @@
 - (void)clearDoneTapped {
     NSInteger done = (NSInteger)[TLTodoStore shared].doneItems.count;
     if (done == 0) {
-        [self showToast:@"还没有已完成的记录"];
+        [self showToast:@"还没有已完成的任务"];
         return;
     }
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"清空已完成"
