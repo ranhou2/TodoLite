@@ -1,0 +1,25 @@
+# 构建产物
+build/
+*.ipa
+*.app
+DerivedData/
+
+# 签名与证书（绝对不要提交）
+*.p12
+*.mobileprovision
+*.cer
+*.key
+*.pem
+
+# 工具链与 SDK（体积大且不应随仓库分发）
+sdks/
+ldid/
+iPhoneOS*.sdk
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+xcuserdata/
+.vscode/
+.idea/
+*.log
